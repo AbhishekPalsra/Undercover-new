@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1140 660" role="img" aria-labelledby="title desc">
+<title id="title">How one claim reaches a result</title><desc id="desc">A waiting claim is reserved, reviewed and given a decision. Decline and refer finish without payment. An approval up to 1000 dollars is decided with payment tracked separately. An approval above 1000 waits for sign-off before simulated payment.</desc>
+<defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto-start-reverse"><path d="M0 0L10 5L0 10" fill="#456671"/></marker></defs>
+<rect width="1140" height="660" rx="18" fill="#F0F4F5"/>
+<g font-family="Arial, sans-serif" fill="#073B4C">
+<text x="32" y="42" font-size="24" font-weight="700">How one claim reaches a result</text>
+<rect x="360" y="75" width="420" height="70" rx="12" fill="#FFFFFF"/>
+<text x="570.0" y="104" font-size="17" font-weight="700" text-anchor="middle">Waiting</text>
+<text x="570.0" y="129" font-size="14" fill="#073B4C" text-anchor="middle">A handler starts one claim or the whole queue</text>
+<rect x="360" y="180" width="420" height="85" rx="12" fill="#FFEDC2"/>
+<text x="570.0" y="209" font-size="17" font-weight="700" text-anchor="middle">In progress</text>
+<text x="570.0" y="234" font-size="14" fill="#073B4C" text-anchor="middle">Reserved for review; queued or running</text>
+<text x="570.0" y="255" font-size="14" fill="#073B4C" text-anchor="middle">Read claim, policy, history and wording</text>
+<rect x="360" y="305" width="420" height="70" rx="12" fill="#C8F4E8"/>
+<text x="570.0" y="334" font-size="17" font-weight="700" text-anchor="middle">Record a decision</text>
+<text x="570.0" y="359" font-size="14" fill="#073B4C" text-anchor="middle">Outcome + calculation + reason + policy section</text>
+<polyline points="570,145 570,180" fill="none" stroke="#456671" stroke-width="2" marker-end="url(#arrow)" stroke-linejoin="round"/>
+<polyline points="570,265 570,305" fill="none" stroke="#456671" stroke-width="2" marker-end="url(#arrow)" stroke-linejoin="round"/>
+<rect x="35" y="440" width="310" height="92" rx="12" fill="#FFFFFF"/>
+<text x="190.0" y="469" font-size="17" font-weight="700" text-anchor="middle">Decline or refer</text>
+<text x="190.0" y="494" font-size="14" fill="#073B4C" text-anchor="middle">Decided</text>
+<text x="190.0" y="515" font-size="14" fill="#073B4C" text-anchor="middle">No payment is due</text>
+<rect x="415" y="440" width="310" height="92" rx="12" fill="#C8F4E8"/>
+<text x="570.0" y="469" font-size="17" font-weight="700" text-anchor="middle">Approve: $1,000 or less</text>
+<text x="570.0" y="494" font-size="14" fill="#073B4C" text-anchor="middle">Decided</text>
+<text x="570.0" y="515" font-size="14" fill="#073B4C" text-anchor="middle">Request simulated payment</text>
+<rect x="795" y="440" width="310" height="92" rx="12" fill="#FFE0D4"/>
+<text x="950.0" y="469" font-size="17" font-weight="700" text-anchor="middle">Approve: over $1,000</text>
+<text x="950.0" y="494" font-size="14" fill="#073B4C" text-anchor="middle">Waiting for sign-off</text>
+<text x="950.0" y="515" font-size="14" fill="#073B4C" text-anchor="middle">Payment is blocked</text>
+<polyline points="450,375 450,402 190,402 190,440" fill="none" stroke="#456671" stroke-width="2" marker-end="url(#arrow)" stroke-linejoin="round"/>
+<polyline points="570,375 570,440" fill="none" stroke="#456671" stroke-width="2" marker-end="url(#arrow)" stroke-linejoin="round"/>
+<polyline points="690,375 690,402 950,402 950,440" fill="none" stroke="#456671" stroke-width="2" marker-end="url(#arrow)" stroke-linejoin="round"/>
+<rect x="795" y="565" width="310" height="70" rx="12" fill="#D7EDF4"/>
+<text x="950.0" y="594" font-size="17" font-weight="700" text-anchor="middle">Handler signs off</text>
+<text x="950.0" y="619" font-size="14" fill="#073B4C" text-anchor="middle">Decided; simulated payment recorded</text>
+<polyline points="950,532 950,565" fill="none" stroke="#456671" stroke-width="2" marker-end="url(#arrow)" stroke-linejoin="round"/>
+<text x="40" y="578" font-size="15" fill="#456671" text-anchor="start">Approved does not automatically mean paid.</text>
+<text x="40" y="600" font-size="15" fill="#456671" text-anchor="start">Payment is tracked separately and may need a retry.</text>
+<text x="40" y="622" font-size="15" fill="#456671" text-anchor="start">Refer means a person or more evidence is needed;</text>
+<text x="40" y="644" font-size="15" fill="#456671" text-anchor="start">follow-up handling is outside this pilot.</text>
+</g></svg>

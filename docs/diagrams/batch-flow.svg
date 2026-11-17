@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1140 510" role="img" aria-labelledby="title desc">
+<title id="title">What “Process all claims” does</title><desc id="desc">The backend reserves a fixed list of waiting claims, then processes each one sequentially. Errors are recorded and do not stop later claims. The browser can close while the backend keeps running. A server restart interrupts the batch.</desc>
+<defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto-start-reverse"><path d="M0 0L10 5L0 10" fill="#456671"/></marker></defs>
+<rect width="1140" height="510" rx="18" fill="#F0F4F5"/>
+<g font-family="Arial, sans-serif" fill="#073B4C">
+<text x="32" y="42" font-size="24" font-weight="700">What “Process all claims” does</text>
+<rect x="35" y="100" width="245" height="100" rx="12" fill="#C8F4E8"/>
+<text x="157.5" y="129" font-size="17" font-weight="700" text-anchor="middle">1. Click once</text>
+<text x="157.5" y="154" font-size="14" fill="#073B4C" text-anchor="middle">Process all claims</text>
+<text x="157.5" y="175" font-size="14" fill="#073B4C" text-anchor="middle">on the queue</text>
+<rect x="365" y="100" width="310" height="100" rx="12" fill="#FFEDC2"/>
+<text x="520.0" y="129" font-size="17" font-weight="700" text-anchor="middle">2. Reserve waiting claims</text>
+<text x="520.0" y="154" font-size="14" fill="#073B4C" text-anchor="middle">Skip active and decided claims</text>
+<text x="520.0" y="175" font-size="14" fill="#073B4C" text-anchor="middle">Prevent duplicate starts</text>
+<rect x="760" y="100" width="335" height="100" rx="12" fill="#FFE0D4"/>
+<text x="927.5" y="129" font-size="17" font-weight="700" text-anchor="middle">3. Review the next claim</text>
+<text x="927.5" y="154" font-size="14" fill="#073B4C" text-anchor="middle">One claim at a time</text>
+<text x="927.5" y="175" font-size="14" fill="#073B4C" text-anchor="middle">Read, decide and request payment</text>
+<polyline points="280,150 365,150" fill="none" stroke="#456671" stroke-width="2" marker-end="url(#arrow)" stroke-linejoin="round"/>
+<polyline points="675,150 760,150" fill="none" stroke="#456671" stroke-width="2" marker-end="url(#arrow)" stroke-linejoin="round"/>
+<rect x="760" y="285" width="335" height="100" rx="12" fill="#FFFFFF"/>
+<text x="927.5" y="314" font-size="17" font-weight="700" text-anchor="middle">4. Save the result or error</text>
+<text x="927.5" y="339" font-size="14" fill="#073B4C" text-anchor="middle">A failure does not stop the queue</text>
+<text x="927.5" y="360" font-size="14" fill="#073B4C" text-anchor="middle">Sign-off can wait for a handler</text>
+<polyline points="928,200 928,285" fill="none" stroke="#456671" stroke-width="2" marker-end="url(#arrow)" stroke-linejoin="round"/>
+<polyline points="1095,335 1120,335 1120,235 1000,235 1000,200" fill="none" stroke="#456671" stroke-width="2" marker-end="url(#arrow)" stroke-linejoin="round"/>
+<text x="1061" y="254" font-size="13" fill="#456671" text-anchor="middle">Next claim</text>
+<rect x="365" y="285" width="310" height="100" rx="12" fill="#D7EDF4"/>
+<text x="520.0" y="314" font-size="17" font-weight="700" text-anchor="middle">5. Finish this batch</text>
+<text x="520.0" y="339" font-size="14" fill="#073B4C" text-anchor="middle">Retry unfinished claims if needed</text>
+<text x="520.0" y="360" font-size="14" fill="#073B4C" text-anchor="middle">Do not redecide completed claims</text>
+<polyline points="760,335 675,335" fill="none" stroke="#456671" stroke-width="2" marker-end="url(#arrow)" stroke-linejoin="round"/>
+<text x="717" y="321" font-size="13" fill="#456671" text-anchor="middle">Batch done</text>
+<text x="40" y="435" font-size="15" fill="#456671" text-anchor="start">The website refreshes progress about once a second while work is active.</text>
+<text x="40" y="465" font-size="15" fill="#456671" text-anchor="start">Closing the browser is fine. The backend must stay running for processing to continue.</text>
+</g></svg>
