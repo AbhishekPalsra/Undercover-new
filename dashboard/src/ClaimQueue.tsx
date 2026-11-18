@@ -30,28 +30,48 @@ export function ClaimQueue({ claims, refresh }: Readonly<Props>) {
     <>
       <div className="page-title">
         <div>
-          <p className="eyebrow">CLAIMS OPERATIONS</p>
+          <p className="eyebrow">YOUR CLAIMS WORKSPACE</p>
           <h1>Every journey. Every claim.</h1>
-          <p>Review the queue and follow the UnderCover Agent's work.</p>
+          <p>
+            A little clarity for every journey.
+            <br />
+            Review claims and follow your agent's work, all in one place.
+          </p>
         </div>
         <ProcessAllButton claims={claims} refresh={refresh} />
       </div>
-      <div className="stats">
+      <div className="stats" role="group" aria-label="Filter claims by status">
         {["waiting", "in_progress", "waiting_for_sign_off", "decided"].map(
-          (status) => (
-            <div className={"stat " + status} key={status}>
-              <span>{label(status)}</span>
-              <strong>
-                {claims.filter((c) => c.status === status).length}
-              </strong>
-            </div>
+          (value) => (
+            <button
+              className={"stat " + value}
+              key={value}
+              aria-label={"Filter by " + label(value)}
+              aria-pressed={status === value}
+              onClick={() => {
+                setStatus(status === value ? "" : value);
+              }}
+            >
+              <span className="stat-label">
+                <span className="status-dot" aria-hidden="true" />
+                {label(value)}
+              </span>
+              <strong>{claims.filter((c) => c.status === value).length}</strong>
+              <span className="stat-hint">
+                View claims <span aria-hidden="true">↗</span>
+              </span>
+            </button>
           ),
         )}
       </div>
       <section className="panel queue">
-        <h2>
-          Claims queue <span className="count">· {claims.length} claims</span>
-        </h2>
+        <div className="queue-heading">
+          <div>
+            <p className="eyebrow">THE OVERVIEW</p>
+            <h2>Claims queue</h2>
+          </div>
+          <span className="count">{claims.length} claims</span>
+        </div>
         <div className="queue-filters">
           <label>
             <span>Search claims</span>
@@ -97,7 +117,7 @@ export function ClaimQueue({ claims, refresh }: Readonly<Props>) {
             </button>
           )}
         </div>
-        <p className="results-count">
+        <p className="results-count" role="status">
           Showing {visible.length} of {claims.length}
         </p>
         {claims.length > 0 && visible.length === 0 && (
@@ -105,7 +125,7 @@ export function ClaimQueue({ claims, refresh }: Readonly<Props>) {
         )}
         {claims.length === 0 && <p>No claims in the queue.</p>}
         <div className="table-scroll">
-          <table>
+          <table aria-label="Claims queue">
             <thead>
               <tr>
                 <th>Claim / customer</th>
@@ -117,16 +137,27 @@ export function ClaimQueue({ claims, refresh }: Readonly<Props>) {
             <tbody>
               {visible.map((item) => (
                 <tr key={item.claim_id}>
-                  <td>
-                    <a href={"#" + item.claim_id}>{item.claim_id}</a>
-                    <span className="customer">{item.customer.name}</span>
+                  <td className="claim-person">
+                    <span className="avatar" aria-hidden="true">
+                      {item.customer.name
+                        .split(" ")
+                        .map((part) => part[0])
+                        .slice(0, 2)
+                        .join("")}
+                    </span>
+                    <div>
+                      <a href={"#" + item.claim_id}>{item.claim_id}</a>
+                      <span className="customer">{item.customer.name}</span>
+                    </div>
                   </td>
-                  <td>
+                  <td className="claim-summary">
                     {item.summary}
                     <small>{label(item.claim_type)}</small>
                   </td>
-                  <td className="numeric">{money(item.amount_claimed)}</td>
-                  <td>
+                  <td className="numeric" data-label="Amount claimed">
+                    {money(item.amount_claimed)}
+                  </td>
+                  <td className="claim-status">
                     <span className={"badge " + item.status}>
                       {label(item.status)}
                     </span>

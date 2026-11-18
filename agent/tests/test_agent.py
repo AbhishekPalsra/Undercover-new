@@ -45,24 +45,31 @@ def test_run(tmp_path, monkeypatch, claim_id, outcome):
 
 
 def test_model_name(monkeypatch):
-    monkeypatch.setenv("OPENROUTER_API_KEY", "test-key")
+    monkeypatch.setenv("OPENAI_API_KEY", "test-key")
+    monkeypatch.delenv("OPENROUTER_API_KEY", raising=False)
     monkeypatch.delenv("MODEL_NAME", raising=False)
-    assert main.model().model_name == "openai/gpt-6-luna"
+    assert main.model().model_name == "gpt-5-mini"
     assert main.model().reasoning_effort == "low"
-    monkeypatch.setenv("MODEL_NAME", "openrouter/free")
-    assert main.model().model_name == "openrouter/free"
+    monkeypatch.setenv("MODEL_NAME", "gpt-5-mini")
+    assert main.model().reasoning_effort == "low"
+    monkeypatch.setenv("MODEL_NAME", "gpt-4.1-mini")
+    assert main.model().model_name == "gpt-4.1-mini"
     assert main.model().reasoning_effort is None
 
 
-@pytest.mark.parametrize("name", ["", "openrouter/free"])
+@pytest.mark.parametrize("name", ["", "gpt-5-mini", "gpt-4.1-mini"])
 def test_model_request_has_explicit_response_limit(monkeypatch, name):
-    monkeypatch.setenv("OPENROUTER_API_KEY", "test-key")
+    monkeypatch.setenv("OPENAI_API_KEY", "test-key")
+    monkeypatch.delenv("OPENROUTER_API_KEY", raising=False)
     monkeypatch.setenv("MODEL_NAME", name)
+    monkeypatch.setenv("OPENAI_BASE_URL", "https://unused.example/v1")
     requests = []
     reported = []
-    served = "provider/routed:free" if name else main.DEFAULT_MODEL
+    served = name or main.DEFAULT_MODEL
 
     def respond(request):
+        assert str(request.url) == "https://api.openai.com/v1/chat/completions"
+        assert request.headers["authorization"] == "Bearer test-key"
         requests.append(json.loads(request.content))
         return httpx.Response(
             200,
@@ -102,13 +109,17 @@ def test_model_request_has_explicit_response_limit(monkeypatch, name):
         )
     assert requests[0]["model"] == (name or main.DEFAULT_MODEL)
     assert requests[0]["max_completion_tokens"] == 8192
+    if served == main.DEFAULT_MODEL:
+        assert requests[0]["reasoning_effort"] == "low"
+    else:
+        assert "reasoning_effort" not in requests[0]
     assert reported == [("model", served)]
 
 
 def test_failure(tmp_path, monkeypatch):
     monkeypatch.setenv("UNDERCOVER_DB", str(tmp_path / "claims.db"))
     monkeypatch.setenv("UNDERCOVER_STUB", "0")
-    monkeypatch.delenv("OPENROUTER_API_KEY", raising=False)
+    monkeypatch.delenv("OPENAI_API_KEY", raising=False)
     monkeypatch.setattr(api, "launch", lambda *_: None)
     with TestClient(api.app) as client:
         monkeypatch.setattr(api, "run", main.run)

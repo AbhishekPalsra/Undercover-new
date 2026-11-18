@@ -15,8 +15,8 @@ from agent.activity import ModelActivity
 from agent.testing import scripted_model
 
 load_dotenv()
-OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"
-DEFAULT_MODEL = "openai/gpt-6-luna"
+OPENAI_BASE_URL = "https://api.openai.com/v1"
+DEFAULT_MODEL = "gpt-5-mini"
 MAX_RESPONSE_TOKENS = 8192
 
 
@@ -28,13 +28,13 @@ def backend() -> httpx.Client:
 
 
 def model() -> ChatOpenAI:
-    """Construct the configured OpenRouter model."""
-    name = os.getenv("MODEL_NAME")
+    """Construct the configured OpenAI model."""
+    name = os.getenv("MODEL_NAME") or DEFAULT_MODEL
     return ChatOpenAI(
-        model=name or DEFAULT_MODEL,
-        base_url=OPENROUTER_BASE_URL,
-        api_key=SecretStr(os.environ["OPENROUTER_API_KEY"]),
-        reasoning_effort=None if name else "low",
+        model=name,
+        base_url=OPENAI_BASE_URL,
+        api_key=SecretStr(os.environ["OPENAI_API_KEY"]),
+        reasoning_effort="low" if name == DEFAULT_MODEL else None,
         max_completion_tokens=MAX_RESPONSE_TOKENS,
     )
 

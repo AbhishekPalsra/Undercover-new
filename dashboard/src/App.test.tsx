@@ -474,6 +474,35 @@ it("filters the queue by text and status and clears filters", async () => {
   expect(screen.getByRole("link", { name: "CLM-1001" })).toBeDefined();
 });
 
+it("filters from status cards, syncs the select and toggles back to all claims", async () => {
+  setup({}, "");
+  const decided = await screen.findByRole("button", {
+    name: "Filter by Decided",
+  });
+  fireEvent.click(decided);
+  expect(decided.getAttribute("aria-pressed")).toBe("true");
+  expect(screen.getByLabelText<HTMLSelectElement>("Queue status").value).toBe(
+    "decided",
+  );
+  expect(screen.queryByRole("link", { name: "CLM-1001" })).toBeNull();
+  fireEvent.click(decided);
+  expect(decided.getAttribute("aria-pressed")).toBe("false");
+  expect(screen.getByRole("link", { name: "CLM-1001" })).toBeDefined();
+});
+
+it("skips navigation without changing the current claim route", async () => {
+  setup();
+  await screen.findByText("My flight was canceled.");
+  fireEvent.click(screen.getByRole("link", { name: "Skip to content" }));
+  expect(document.activeElement).toBe(screen.getByRole("main"));
+  expect(window.location.hash).toBe("#CLM-1001");
+  expect(
+    screen
+      .getByRole("link", { name: "Claims queue" })
+      .getAttribute("aria-current"),
+  ).toBe("page");
+});
+
 it.each([
   { outcome: "approve", payment: null, text: "Payment pending" },
   { outcome: "decline", payment: null, text: "No payment due" },

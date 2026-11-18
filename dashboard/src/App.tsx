@@ -76,8 +76,18 @@ export function App() {
   }
   return (
     <div className="shell">
+      <a
+        className="skip-link"
+        href="#main-content"
+        onClick={(event) => {
+          event.preventDefault();
+          document.getElementById("main-content")?.focus();
+        }}
+      >
+        Skip to content
+      </a>
       <Header view={view} />
-      <main>
+      <main id="main-content" tabIndex={-1}>
         {view && (
           <a className="back" href="/#">
             ← Claims queue
@@ -89,7 +99,9 @@ export function App() {
           </p>
         )}
         {loading ? (
-          <p role="status">Loading records…</p>
+          <p className="panel loading-state" role="status">
+            Loading records…
+          </p>
         ) : (
           <>
             {view === "instructions" && (
@@ -128,11 +140,23 @@ export function App() {
 function Header({ view }: Readonly<{ view: string }>) {
   return (
     <header>
-      <a className="wordmark" href="/#">
-        undercover<span> / travel insurance</span>
+      <a
+        className="wordmark"
+        href="/#"
+        aria-label="UnderCover Travel Insurance"
+      >
+        <span className="brand-symbol" aria-hidden="true">
+          u.
+        </span>
+        <span className="brand-name">
+          undercover<span>Travel insurance</span>
+        </span>
       </a>
       <nav aria-label="Main">
-        <a href="/#" aria-current={!view ? "page" : undefined}>
+        <a
+          href="/#"
+          aria-current={view !== "instructions" ? "page" : undefined}
+        >
           Claims queue
         </a>
         <a
@@ -142,7 +166,10 @@ function Header({ view }: Readonly<{ view: string }>) {
           Agent instructions
         </a>
       </nav>
-      <span className="pilot">Claims pilot</span>
+      <span className="pilot">
+        <span aria-hidden="true" />
+        Claims pilot
+      </span>
     </header>
   );
 }

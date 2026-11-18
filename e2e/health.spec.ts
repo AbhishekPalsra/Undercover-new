@@ -251,3 +251,52 @@ test("queue search and status filters are easy to clear", async ({ page }) => {
     page.getByRole("link", { name: "CLM-1002", exact: true }),
   ).toBeVisible();
 });
+
+test("responsive workspace supports keyboard filters and accessibility preferences", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.emulateMedia({
+    colorScheme: "dark",
+    reducedMotion: "reduce",
+    contrast: "more",
+  });
+  await page.goto("/");
+  await expect(page.getByRole("table", { name: "Claims queue" })).toBeVisible();
+  await page.keyboard.press("Tab");
+  await expect(
+    page.getByRole("link", { name: "Skip to content" }),
+  ).toBeFocused();
+  await page.keyboard.press("Enter");
+  await expect(page.getByRole("main")).toBeFocused();
+  const card = page.getByRole("button", { name: "Filter by Decided" });
+  await card.focus();
+  await page.keyboard.press("Enter");
+  await expect(card).toHaveAttribute("aria-pressed", "true");
+  await expect(page.getByLabel("Queue status")).toHaveValue("decided");
+  await page.keyboard.press("Enter");
+  await expect(card).toHaveAttribute("aria-pressed", "false");
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= window.innerWidth,
+    ),
+  ).toBe(true);
+  await page.getByRole("link", { name: "CLM-1001", exact: true }).click();
+  await expect(
+    page.getByRole("heading", { name: "Supporting documents" }),
+  ).toBeVisible();
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= window.innerWidth,
+    ),
+  ).toBe(true);
+  await page
+    .getByRole("link", { name: "Agent instructions", exact: true })
+    .click();
+  await expect(page.locator("pre")).toContainText("policy wording");
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= window.innerWidth,
+    ),
+  ).toBe(true);
+});

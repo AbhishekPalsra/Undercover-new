@@ -42,7 +42,7 @@ Think of the app as a small insurance office:
 - **The backend is the service desk that enforces the rules.** It answers requests, starts reviews, saves results and checks whether payment is allowed.
 - **The database is the filing cabinet.** It keeps claims, decisions, activity, sign-offs and payment records after the app closes.
 - **The AI agent is the reviewer.** It gets instructions and evidence, asks a language model what to do, and uses a limited set of tools to act.
-- **OpenRouter is the connection to the external AI model.** The agent runs on your computer; model requests travel over the internet.
+- **OpenAI supplies the external AI model.** The agent runs on your computer; model requests travel over the internet directly to OpenAI.
 
 ![Project architecture: website, backend, database, seed files, local AI agent and external model.](docs/diagrams/architecture.svg)
 
@@ -71,7 +71,7 @@ Here is the journey in everyday language:
 
 The model may make several tool calls before finishing. The activity list shows actions and results, such as reading context or a blocked payment; it does not show the model's private internal reasoning.
 
-The **Model for this review** card distinguishes the requested route (for example, `openrouter/free`) from the actual responding model names returned in API replies. A routed review can use different models across its calls, so all reported models for the latest review are shown. These names are saved with the activity and survive a reload. If metadata is missing, the app says so; it does not guess. Older reviews do not gain model names retroactively: reset and process again to capture them. Scripted test runs are labeled as test models. OpenRouter documents the [response model field](https://openrouter.ai/blog/insights/model-routing/) as the way to identify the model that answered.
+The **Model for this review** card distinguishes the requested model (for example, `gpt-5-mini`) from the responding model names returned in API replies. All reported models for the latest review are shown. These names are saved with the activity and survive a reload. If metadata is missing, the app says so; it does not guess. Older reviews do not gain model names retroactively: reset and process again to capture them. Scripted test runs are labeled as test models.
 
 ### The four labels in the queue
 
@@ -163,16 +163,16 @@ npm install
 Create or edit `.env` in the repository root and add your own key:
 
 ```dotenv
-OPENROUTER_API_KEY=your-openrouter-key-here
+OPENAI_API_KEY=your-openai-key-here
 ```
 
-Set `MODEL_NAME=openrouter/free` in `.env` to use the free router. Restart the app after changing this setting. If no override is set, the code default model is `openai/gpt-6-luna` with low reasoning effort. To choose a different OpenRouter model, optionally add a line such as:
+The agent connects directly to OpenAI and defaults to `gpt-5-mini` with low reasoning effort. The current workspace selects that model explicitly in `.env`:
 
 ```dotenv
-MODEL_NAME=openrouter/free
+MODEL_NAME=gpt-5-mini
 ```
 
-Model selection is defined in [`agent/main.py`](agent/main.py): `DEFAULT_MODEL` names the default and `model()` reads the `MODEL_NAME` override. Every request has an explicit 8,192-token response limit (`MAX_RESPONSE_TOKENS`), including reasoning where applicable, to avoid an oversized provider-default budget. The override uses that model's defaults for reasoning effort. Availability and usage allowances depend on the selected provider. Running real claims makes model requests; a full queue can make many requests, rather than one call for all claims.
+Model selection is defined in [`agent/main.py`](agent/main.py): `DEFAULT_MODEL` names the default and `model()` reads the `MODEL_NAME` override. Use an OpenAI model ID without an `openai/` prefix; OpenRouter names such as `openrouter/free` do not work with this endpoint. GPT-5 mini uses low reasoning effort whether selected by default or explicitly; other models use their default reasoning settings. Every request has an explicit 8,192-token response limit (`MAX_RESPONSE_TOKENS`), including reasoning where applicable. Restart the app after changing the key or model. Running real claims makes model requests; a full queue can make many requests, rather than one call for all claims.
 
 Start the app:
 
@@ -310,7 +310,7 @@ For a narrower check, use `npm run check:python`, `npm run check:ts` or `npm run
 Common problems:
 
 - **The website opens but claims do not load:** check that `npm run dev` is still running and the backend health address responds.
-- **OpenRouter reports a 402 credit error:** the agent now limits each response to 8,192 tokens. Restart the app after updating the code, then retry waiting claims. A genuinely insufficient remaining balance can still block requests.
+- **Model requests fail:** confirm that `OPENAI_API_KEY` is set and `MODEL_NAME` is an OpenAI model ID, then restart the backend. The agent activity records the error for the failed review. Each response is limited to 8,192 tokens.
 - **A review fails:** inspect the claim's activity and backend terminal. Check the key, model name, provider access and connectivity, then retry unfinished work.
 - **Process all claims is disabled:** work is already active, or no waiting claims remain. Sign-off and decided claims are not started again.
 - **An approval is unpaid:** check whether sign-off is required. Otherwise, wait for the run to finish and use Retry payment.

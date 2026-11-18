@@ -10,7 +10,7 @@ npm run dev
 
 Open http://localhost:5173. FastAPI's API documentation is at http://localhost:8000/docs.
 
-Set `OPENROUTER_API_KEY` in the root `.env`. Set `MODEL_NAME=openrouter/free` in `.env` to use the free router. Without an override, the default model is `openai/gpt-6-luna` with low reasoning effort. Set `MODEL_NAME` to select another OpenRouter model, for example `openrouter/free`. Keys stay on the backend. Model selection is in `agent/main.py` (`DEFAULT_MODEL` and `model()`). Each model request is capped at 8,192 response tokens, including reasoning where applicable, for both the default and overridden model. Restart the app after changing agent configuration, then retry waiting claims.
+Set `OPENAI_API_KEY` in the root `.env`. The agent connects directly to OpenAI and defaults to `gpt-5-mini` with low reasoning effort. This workspace also selects `MODEL_NAME=gpt-5-mini` explicitly in `.env`. Set `MODEL_NAME` to select another OpenAI model, using its API model ID without an `openai/` prefix. GPT-5 mini always uses low reasoning effort; other models use their default reasoning settings. Keys stay on the backend. Model selection is in `agent/main.py` (`DEFAULT_MODEL` and `model()`). Each model request is capped at 8,192 response tokens, including reasoning where applicable, for both the default and overridden model. Restart the app after changing agent configuration, then retry waiting claims.
 
 Choose **Process all claims** on the queue to review every waiting claim sequentially in the background. Progress updates automatically, and processing continues if you leave the page. Claims already running or decided are skipped. A failed claim does not stop the remaining queue; unfinished claims can be retried after the batch ends.
 

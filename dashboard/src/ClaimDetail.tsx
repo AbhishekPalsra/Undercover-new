@@ -16,14 +16,14 @@ export function ClaimDetail({ claim, handlers, busy, act }: Readonly<Props>) {
   return (
     <>
       <section className="panel claim-heading">
-        <div>
+        <div className="claim-intro">
           <p className="eyebrow">CLAIM / {claim.claim_id}</p>
           <h1>{claim.summary}</h1>
           <p>
             {claim.customer.name} · {label(claim.claim_type)}
           </p>
         </div>
-        <div>
+        <div className="claim-amount">
           <span className={"badge " + claim.status}>{label(claim.status)}</span>
           <p className="amount">{money(claim.amount_claimed)}</p>
           <small>Amount claimed</small>
@@ -91,7 +91,7 @@ export function ClaimDetail({ claim, handlers, busy, act }: Readonly<Props>) {
           </section>
         </div>
         <aside>
-          <section className="panel">
+          <section className="panel decision-panel">
             <p className="eyebrow">UNDERCOVER AGENT</p>
             <h2>Decision</h2>
             {decision ? (
